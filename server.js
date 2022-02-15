@@ -117,33 +117,35 @@ app.get('/api/candidate/:id', (req, res) => {
     });
   });
 
-//UPDATE a candidate party
+// Update a candidate's party
 app.put('/api/candidate/:id', (req, res) => {
+    // Candidate is allowed to not have party affiliation
     const errors = inputCheck(req.body, 'party_id');
     if (errors) {
-        res.status(400).json ({ error: errors });
-        return;
+      res.status(400).json({ error: errors });
+      return;
     }
-    const sql = `UPDATE candidates SET party_id = ?
-    WHERE id =?`;
-    const params = [req.params.party_id, req.params.id];
-    db.query(sql, params, (err, results) => {
-        if (err) {
-            res.status(400).json({ error: err.message })
-            //check if a record was found
-        } else if (!result.affectedRows) {
-            res.json({
-                message: 'Candidate not found'
-            });
-        } else {
-            res.json ({
-                message: 'success',
-                data: req.body,
-                changes: result.affectedRows
-            });
-        }
+  
+    const sql = `UPDATE candidates SET party_id = ? 
+                 WHERE id = ?`;
+    const params = [req.body.party_id, req.params.id];
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        res.status(400).json({ error: err.message });
+        // check if a record was found
+      } else if (!result.affectedRows) {
+        res.json({
+          message: 'Candidate not found'
+        });
+      } else {
+        res.json({
+          message: 'success',
+          data: req.body,
+          changes: result.affectedRows
+        });
+      }
     });
-});
+  });
 
 //DELETE a candidate
 //must use DELETE instead of GET
