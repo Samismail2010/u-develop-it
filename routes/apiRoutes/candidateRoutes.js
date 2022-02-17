@@ -5,7 +5,7 @@ const inputCheck = require('../../utils/inputCheck');
 
 
 //return data from ALL candidates table in MySQL
-router.get("/candidates", (req, res) => {
+router.get('/candidates', (req, res) => {
     const sql = `SELECT candidates.*, parties.name
                   AS party_name
                   FROM candidates
@@ -18,14 +18,14 @@ router.get("/candidates", (req, res) => {
         return;
       }
       res.json({
-        message: "success",
+        message: 'success',
         data: rows,
       });
     });
   });
   
   //GET a single canidate!
-  router.get("/candidate/:id", (req, res) => {
+  router.get('/candidate/:id', (req, res) => {
     const sql = `SELECT candidates.*, parties.name
                   AS party_name
                   FROM candidates
@@ -42,16 +42,16 @@ router.get("/candidates", (req, res) => {
         return;
       }
       res.json({
-        message: "success",
+        message: 'success',
         data: row,
       });
     });
   });
   
   // Update a candidate's party
-  router.put("/candidate/:id", (req, res) => {
+  router.put('/candidate/:id', (req, res) => {
     // Candidate is allowed to not have party affiliation
-    const errors = inputCheck(req.body, "party_id");
+    const errors = inputCheck(req.body, 'party_id');
     if (errors) {
       res.status(400).json({ error: errors });
       return;
@@ -80,7 +80,7 @@ router.get("/candidates", (req, res) => {
   
   //DELETE a candidate
   //must use DELETE instead of GET
-  router.delete("/candidate/:id", (req, res) => {
+  router.delete('/candidate/:id', (req, res) => {
     const sql = `DELETE FROM candidates WHERE id = ?`;
     //assigned req.params.id to param
     const params = [req.params.id];
@@ -105,16 +105,16 @@ router.get("/candidates", (req, res) => {
   //CREATE a candidate
   //add the values that are assigned to the params
   //4 placeholders must match the 4 values
-  router.post("/candidate", ({ body }, res) => {
+  router.post('/candidate', ({ body }, res) => {
     //use 'body' to pull property out the reqest obj
     //req.body to populate  candidate data
     //inputCheck provided by front end, added import on top of page
     //to avoid error.
     const errors = inputCheck(
       body,
-      "first_name",
-      "last_name",
-      "industry_connected"
+      'first_name',
+      'last_name',
+      'industry_connected'
     );
     if (errors) {
       res.status(400).json({ error: errors });
@@ -136,4 +136,4 @@ router.get("/candidates", (req, res) => {
     });
   });
 
-  module.export = router;
+  module.exports = router;
